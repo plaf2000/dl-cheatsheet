@@ -5,11 +5,11 @@
 \subsectiontitle{Backpropagation}
 
 \begin{subsubsectionbox}{Parameter derivatives}
-$\frac{\partial x_i^l}{\partial w_{ij}^l} = \dot{\varphi}_i^l x_j^{l-1}$, $\frac{\partial x_i^l}{\partial b_i^l} = \dot{\varphi}_i^l$ where $\dot{\varphi}_i^l := \varphi'^l((w_i^l)^\top x^{l-1} + b_i^l)$
+$\frac{\partial x_i^l}{\partial w_{ij}^l} = \dot{\phi}_i^l x_j^{l-1}$, $\frac{\partial x_i^l}{\partial b_i^l} = \dot{\phi}_i^l$ where $\dot{\phi}_i^l := \phi'^l((w_i^l)^\top x^{l-1} + b_i^l)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Loss derivatives}
-$\frac{\partial h}{\partial w_{ij}^l} = \delta_i^l \dot{\varphi}_i^l x_j^{l-1}$, $\frac{\partial h}{\partial b_i^l} = \delta_i^l \dot{\varphi}_i^l$ with $\delta_i^l = \frac{\partial h}{\partial x_i^l} \dot{\varphi}_i^l$
+$\frac{\partial h}{\partial w_{ij}^l} = \delta_i^l \dot{\phi}_i^l x_j^{l-1}$, $\frac{\partial h}{\partial b_i^l} = \delta_i^l \dot{\phi}_i^l$ with $\delta_i^l = \frac{\partial h}{\partial x_i^l} \dot{\phi}_i^l$
 \end{subsubsectionbox}
 
 \subsectiontitle{Gradient Descent}

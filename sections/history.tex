@@ -19,21 +19,22 @@ $\gamma[w, b](x, y) := \frac{y(x \cdot w + b)}{\|w\|}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Maximum Margin Classifier}
-$(w^*, b^*) \in \argmax_{w,b} \gamma[w, b](S)$ with $\gamma[w, b](S) := \min_{(x,y) \in S} \gamma[w, b](x, y)$
+$(w^*, b^*) \in \argmax_{w,b} \gamma[w, b](S)$\\
+with $\gamma[w, b](S) := \min_{(x,y) \in S} \gamma[w, b](x, y)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Perceptron Learning}
 if $f[w, b](x) \neq y$: update $w \leftarrow w + yx$, and $b \leftarrow b + y$
 
-$w_0 \in \text{span}(x_1,\ldots,x_s) \Rightarrow w_t \in \text{span}(x_1,\ldots,x_s) (\forall t)$
+$w^0 \in \text{span}(x_1,\ldots,x_s) \Rightarrow w^t \in \text{span}(x_1,\ldots,x_s) (\forall t)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Convergence}
-$\exists w, \|w\| = 1$, that $\gamma[w](S) = \gamma > 0 \Rightarrow w_t \cdot w \geq t\gamma$.
+$\exists w, \|w\| = 1$, that $\gamma[w](S) = \gamma > 0 \Rightarrow w^t \cdot w \geq t\gamma$.
 
-$R = \max_{x \in S} \|x\| \Rightarrow \|w_t\| \leq R\sqrt{t}$
+$R = \max_{x \in S} \|x\| \Rightarrow \|w^t\| \leq R\sqrt{t}$
 
-$\cos \angle(w, w_t) = \frac{w \cdot w_t}{\|w_t\|} \geq \frac{t\gamma}{\sqrt{t}R} = \frac{\sqrt{t}\gamma}{R} \leq 1 \Rightarrow t \leq \frac{R^2}{\gamma^2}$
+$\cos \angle(u, w^t) = \frac{u \cdot w^t}{\|w^t\|} \geq \frac{t\gamma}{\sqrt{t}R} = \frac{\sqrt{t}\gamma}{R} \leq 1 \Rightarrow t \leq \frac{R^2}{\gamma^2}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Covers Theorem}
