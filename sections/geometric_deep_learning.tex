@@ -1,0 +1,76 @@
+% Brown color scheme
+\setsectioncolors{140,100,60}{160,120,80}{252,248,242}{230,215,195}
+\sectiontitle{Geometric Deep Learning}
+
+\subsectiontitle{Sets and Points}
+
+\begin{subsubsectionbox}{Order-invariance}
+$f(x_1,\ldots,x_M) = f(x_{\pi_1},\ldots,x_{\pi_M})$ $\forall \pi \in S_M$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Equivariance}
+$f(x_{\pi_1},\ldots,x_{\pi_M}) = (y_{\pi_1},\ldots,y_{\pi_M})$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Deep Sets model}
+$f(x_1,\ldots,x_M) = f^l(\sum_{m=1}^M \varphi(x_m))$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Equivariant map}
+$f^l : \R \times \R^N \to Y$, $(x_m, \sum_{k=1}^M \varphi(x_k)) \mapsto y_m$
+\end{subsubsectionbox}
+
+\subsectiontitle{Graph Conv Networks}
+
+\begin{subsubsectionbox}{Feature \& adjacency}
+$X = [x_1^\top; \ldots; x_M^\top]$, $A = (a_{nm})$ with $a_{nm} = 1$ if $\{v_n, v_m\} \in E$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Graph invariance}
+$f(X, A) = f(PX, PAP^\top)$ $\forall P$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Graph equivariance}
+$f(X, A) = Pf(PX, PAP^\top)$ $\forall P$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Message passing}
+$\varphi(x_m, X_m) = \varphi(x_m, \bigoplus_{X_m} \Phi(x))$, $\bigoplus$ permutation-invariant
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Normalized adjacency}
+$\bar{A} = D^{-1/2}(A + I)D^{-1/2}$, $D = \diag(d_m)$, $d_m = 1 + \sum_n a_{nm}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{GCN layer}
+$X^+ = \sigma(\bar{A}XW)$
+\end{subsubsectionbox}
+
+\subsectiontitle{Spectral Graph Theory}
+
+\begin{subsubsectionbox}{Graph Laplacian}
+$L = D - A$, $(Lx)_n = \sum_m a_{nm}(x_n - x_m)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Normalized Laplacian}
+$\tilde{L} = I - D^{-1/2}AD^{-1/2}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Graph Fourier transform}
+$L = U\Lambda U^\top$, convolution: $x * y = U((U^\top x) \odot (U^\top y))$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Polynomial kernels}
+$U(\sum_{k=0}^K \alpha_k \Lambda^k)U^\top = \sum_{k=0}^K \alpha_k L^k$
+\end{subsubsectionbox}
+
+\subsectiontitle{Attention GNNs}
+
+\begin{subsubsectionbox}{Attention coupling}
+$q_{ij} = \softmax(f^l(u^\top(Vx_i; Vx_j; x_{ij})))$ s.t. $\sum_j A_{ij} q_{ij} = 1$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Attention propagation}
+$X^+ = \sigma(QXW)$
+\end{subsubsectionbox}
+

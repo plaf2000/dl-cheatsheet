@@ -1,0 +1,136 @@
+\documentclass[10pt,landscape,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{color,graphicx,overpic}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{bbm}
+\usepackage[most]{tcolorbox}
+
+% Page margins
+\geometry{top=0.3cm,left=0.3cm,right=0.3cm,bottom=0.3cm}
+
+% Reduce spacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\columnseprule}{0.2pt}
+\setlength{\columnsep}{0.4cm}
+
+% Reduce math spacing
+\setlength{\abovedisplayskip}{2pt}
+\setlength{\belowdisplayskip}{2pt}
+\setlength{\abovedisplayshortskip}{1pt}
+\setlength{\belowdisplayshortskip}{1pt}
+
+% Reduce list spacing
+\setlist{nolistsep,leftmargin=*,topsep=0pt,parsep=0pt,partopsep=0pt}
+
+% Custom commands
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\softmax}{softmax}
+\DeclareMathOperator{\Uniform}{Uniform}
+% \DeclareMathOperator{\span}{span}
+% \DeclareMathOperator{\vec}{vec}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cP}{\mathcal{P}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\vx}{\mathbf{x}}
+
+% Current section colors (set by each section file)
+\definecolor{currentsectionbg}{RGB}{70,130,180}
+\definecolor{currentsubsectionbg}{RGB}{100,150,190}
+\definecolor{currentsubsubsectionbg}{RGB}{200,220,240}
+\definecolor{currentsubsubsectionframe}{RGB}{135,180,220}
+
+% Command to set section colors (called at start of each section file)
+\newcommand{\setsectioncolors}[4]{%
+    \definecolor{currentsectionbg}{RGB}{#1}%
+    \definecolor{currentsubsectionbg}{RGB}{#2}%
+    \definecolor{currentsubsubsectionbg}{RGB}{#3}%
+    \definecolor{currentsubsubsectionframe}{RGB}{#4}%
+}
+
+% Section and subsection counters
+\newcounter{sectioncounter}
+\newcounter{subsectioncounter}[sectioncounter]
+
+% Section header - highlighted background with automatic numbering
+\newcommand{\sectiontitle}[1]{%
+    \stepcounter{sectioncounter}%
+    \setcounter{subsectioncounter}{0}%
+    \vspace{3pt}%
+    \noindent\colorbox{currentsectionbg}{\parbox{\dimexpr\linewidth-2\fboxsep}{\textbf{\large\textcolor{white}{\thesectioncounter. #1}}}}%
+    \vspace{2pt}%
+}
+
+% Subsection header - darker background with white text
+\newcommand{\subsectiontitle}[1]{%
+    \stepcounter{subsectioncounter}%
+    \vspace{2pt}%
+    \noindent\colorbox{currentsubsectionbg}{\parbox{\dimexpr\linewidth-2\fboxsep}{\textbf{\small\textcolor{white}{\thesectioncounter.\thesubsectioncounter\ #1}}}}%
+    \vspace{1pt}%
+}
+
+% Subsubsection box style - small box for content
+\newtcolorbox{subsubsectionbox}[1]{
+    colback=currentsubsubsectionbg,
+    colframe=currentsubsubsectionframe,
+    coltitle=black,
+    fonttitle=\bfseries\scriptsize,
+    title=#1,
+    boxrule=0.3pt,
+    arc=1pt,
+    boxsep=1pt,
+    left=2pt,
+    right=2pt,
+    top=1pt,
+    bottom=1pt,
+    toptitle=0pt,
+    bottomtitle=0pt,
+    before skip=1pt,
+    after skip=1pt
+}
+
+% Remove section numbering
+\setcounter{secnumdepth}{0}
+
+% Compact lists
+\setlist{nolistsep}
+
+\begin{document}
+\raggedright
+\scriptsize
+\begin{multicols}{4}
+
+\input{sections/history}
+\input{sections/feedforward_networks}
+\input{sections/gradient_learning}
+\input{sections/convolutional_networks}
+\input{sections/recurrent_networks}
+\input{sections/attention_transformers}
+\input{sections/geometric_deep_learning}
+\input{sections/tricks_of_trade}
+\input{sections/theory}
+\input{sections/generative_models}
+\input{sections/ethics}
+
+\end{multicols}
+\end{document}

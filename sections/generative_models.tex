@@ -1,0 +1,102 @@
+% Olive color scheme
+\setsectioncolors{120,130,50}{145,155,75}{250,252,235}{225,230,185}
+\sectiontitle{Generative Models}
+
+\subsectiontitle{Variational Auto Encoders}
+
+\begin{subsubsectionbox}{Generative model}
+$p_\theta(x,z) = p_\theta(x|z)p(z)$, $p(z) = \N(0,I)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{ELBO}
+$\ln p_\theta(x) \geq \E_{q_\phi(z|x)}[\ln p_\theta(x|z)] - D_{KL}(q_\phi(z|x) \| p(z))$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Encoder}
+$q_\phi(z|x) = \N(\mu_\phi(x), \sigma_\phi^2(x))$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Decoder}
+$p_\theta(x|z) = \N(\mu_\theta(z), \sigma^2 I)$ or Bernoulli
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Reparameterization trick}
+$z = \mu_\phi(x) + \sigma_\phi(x) \odot \epsilon$, $\epsilon \sim \N(0,I)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{KL divergence (Gaussian)}
+$D_{KL} = \frac{1}{2}\sum_j (\mu_j^2 + \sigma_j^2 - \ln\sigma_j^2 - 1)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{$\beta$-VAE}
+$\cL = \E_q[\ln p(x|z)] - \beta D_{KL}(q \| p)$. $\beta > 1$ for disentanglement.
+\end{subsubsectionbox}
+
+\subsectiontitle{Generative Adversarial Networks}
+
+\begin{subsubsectionbox}{Generator}
+$G: z \mapsto x$, $z \sim p(z)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Discriminator}
+$D: x \mapsto [0,1]$, probability that $x$ is real
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{GAN objective}
+$\min_G \max_D \E_{x \sim p_{\text{data}}}[\ln D(x)] + \E_{z \sim p(z)}[\ln(1 - D(G(z)))]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Optimal discriminator}
+$D^*(x) = \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_G(x)}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Generator loss (non-saturating)}
+$\cL_G = -\E_z[\ln D(G(z))]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Mode collapse}
+$G$ produces limited diversity. Solutions: minibatch discrimination, feature matching.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Wasserstein GAN}
+$\min_G \max_{D \in 1\text{-Lip}} \E_x[D(x)] - \E_z[D(G(z))]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Gradient penalty (WGAN-GP)}
+$\lambda \E_{\hat{x}}[(\|\nabla_{\hat{x}} D(\hat{x})\|_2 - 1)^2]$, $\hat{x} = \alpha x + (1-\alpha)G(z)$
+\end{subsubsectionbox}
+
+\subsectiontitle{Denoising Diffusion}
+
+\begin{subsubsectionbox}{Forward process}
+$q(x_t|x_{t-1}) = \N(x_t; \sqrt{1-\beta_t}x_{t-1}, \beta_t I)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Marginal}
+$q(x_t|x_0) = \N(x_t; \sqrt{\bar{\alpha}_t}x_0, (1-\bar{\alpha}_t)I)$, $\bar{\alpha}_t = \prod_{s=1}^t (1-\beta_s)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Reverse process}
+$p_\theta(x_{t-1}|x_t) = \N(x_{t-1}; \mu_\theta(x_t, t), \sigma_t^2 I)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Training objective}
+$\cL = \E_{t,x_0,\epsilon}[\|\epsilon - \epsilon_\theta(x_t, t)\|^2]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Sampling}
+$x_{t-1} = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon_\theta(x_t,t)) + \sigma_t z$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Score function}
+$\nabla_x \ln p(x) \approx -\frac{\epsilon_\theta(x,t)}{\sqrt{1-\bar{\alpha}_t}}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Classifier-free guidance}
+$\tilde{\epsilon} = (1+w)\epsilon_\theta(x_t,t,c) - w\epsilon_\theta(x_t,t)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{DDIM (deterministic)}
+$x_{t-1} = \sqrt{\bar{\alpha}_{t-1}}(\frac{x_t - \sqrt{1-\bar{\alpha}_t}\epsilon_\theta}{\sqrt{\bar{\alpha}_t}}) + \sqrt{1-\bar{\alpha}_{t-1}}\epsilon_\theta$
+\end{subsubsectionbox}
+

@@ -1,0 +1,38 @@
+% Red color scheme
+\setsectioncolors{180,70,70}{190,100,100}{255,242,242}{245,205,205}
+\sectiontitle{Attention and Transformers}
+
+\subsectiontitle{Attention}
+
+\begin{subsubsectionbox}{Attention mixing}
+$y_s := \sum_t a_{st} Wx_t$, $a_{st} \geq 0$, $\sum_t a_{st} = 1$, $Y = WXA^\top$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Query-key matching}
+$Q = U_Q X$, $K = U_K X$, $Q^\top K = X^\top U_Q^\top U_K X$ (rank $\leq q$)
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Softmax attention}
+$A = \softmax(\beta Q^\top K)$, $a_{st} = \frac{e^{\beta[Q^\top K]_{st}}}{\sum_r e^{\beta[Q^\top K]_{sr}}}$, usually $\beta = 1/\sqrt{q}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Feature transformation}
+$X \mapsto Y \mapsto F(Y)$, $F(\theta)(Y) = (F(y_1),\ldots,F(y_T))$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Positional encoding}
+$p_{tk} = \begin{cases} \sin(t\omega_k) & k \text{ even} \\ \cos(t\omega_k) & k \text{ odd} \end{cases}$, $\omega_k = C^{k/K}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Transformer architecture}
+Self-attention: attend to its own values in the past. Cross-attention: decoder attends to encoder output.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Vision transformer patch embedding}
+$\text{patch}_t \mapsto x_t := V \vec(\text{patch}_t) \in \R^n$ with $V \in \R^{n \times (qp^2)}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{GELU activation}
+$\varphi(z) = z \Pr(z \leq Z)$, $Z \sim \N(0, 1)$
+\end{subsubsectionbox}
+

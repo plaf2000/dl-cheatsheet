@@ -1,0 +1,78 @@
+% Pink color scheme
+\setsectioncolors{180,80,130}{190,110,150}{255,242,250}{245,215,232}
+\sectiontitle{Tricks of the Trade}
+
+\subsectiontitle{Initialization}
+
+\begin{subsubsectionbox}{Random initialization}
+$\theta_i^0 \sim \N(0, \sigma_i^2)$ or $\theta_i^0 \sim \Uniform[-\sqrt{3}\sigma_i; \sqrt{3}\sigma_i]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{LeCun initialization}
+$w_{ij} \sim \Uniform[-a; a]$, $a := 1/\sqrt{n}$, $b_i = 0$. Stabilizes variance.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Glorot initialization}
+$w_{ij} \sim \Uniform[-\sqrt{3}\epsilon; \sqrt{3}\epsilon]$, $\epsilon := 2/(n+m)$. Stabilizes gradient variance.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{He initialization}
+$w_{ij} \sim \N(0, \epsilon)$ or $\Uniform[-\sqrt{3}\epsilon; \sqrt{3}\epsilon]$, $\epsilon := 2/n$. For ReLU (half units active).
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Orthogonal initialization}
+$\frac{1}{\sqrt{m}}W \sim \Uniform(O(m))$ s.t. $W^\top W = WW^\top = mI$
+\end{subsubsectionbox}
+
+\subsectiontitle{Weight Decay}
+
+\begin{subsubsectionbox}{$L_2$ regularization}
+$\mu(\theta) = \frac{\mu}{2}\|\theta\|^2$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{GD with weight decay}
+$\dot{\theta} = -\eta \nabla E(\theta) - \eta \mu \theta$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Local loss landscape}
+$\theta_\mu^* = (H + \mu I)^{-1}H\theta^*$. Minimum shrunk along small eigenvalue directions.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Optimal weight decay}
+$\mu = \sigma^2/u^2$. Inverse proportional to signal-to-noise ratio.
+\end{subsubsectionbox}
+
+\subsectiontitle{Dropout}
+
+\begin{subsubsectionbox}{Dropout as Ensembling}
+$p(y | x) = \sum_{b \in \{0,1\}^R} p(b)p(y | x; b)$, $p(b) = \prod_i \phi_i^{b_i}(1 - \phi_i)^{1-b_i}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Weight scaling for inference}
+$\tilde{w}_{ij} \leftarrow \phi_{ij} w_{ij}$
+\end{subsubsectionbox}
+
+\subsectiontitle{Normalization}
+
+\begin{subsubsectionbox}{Batch normalization}
+$\bar{f} = \frac{f - \E[f]}{\sqrt{\V[f]}}$, $\bar{f}[\mu, \epsilon] = \mu + \epsilon\bar{f}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Weight normalization}
+$w := \frac{\epsilon}{\|v\|_2}v$, $\partial_\epsilon E = \nabla_w E \cdot \frac{v}{\|v\|_2}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Layer normalization}
+$\tilde{f}_i = \frac{f_i - \E[f]}{\sqrt{\V[f]}}$, $\E[f] = \frac{1}{m}\sum_i f_i$, $\V[f] = \frac{1}{m}\sum_i (f_i - \E[f])^2$
+\end{subsubsectionbox}
+
+\subsectiontitle{Model Distillation}
+
+\begin{subsubsectionbox}{Tempered cross entropy}
+$\ell(x) = \sum_y \frac{q\exp[F_y/T]}{\sum_\nu \exp[F_\nu/T]} [\frac{1}{T}G_y - \ln\sum_\nu \exp[G_\nu/T]]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Distillation gradient}
+$\frac{\partial \ell}{\partial G_y} = \frac{1}{T}[\frac{e^{qF_y/T}}{\sum_\nu e^{F_\nu/T}} - \frac{qe^{G_y/T}}{\sum_\nu e^{G_\nu/T}}]$
+\end{subsubsectionbox}
+

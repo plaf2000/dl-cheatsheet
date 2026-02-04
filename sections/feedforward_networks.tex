@@ -1,0 +1,84 @@
+% Green color scheme
+\setsectioncolors{60,140,80}{90,160,100}{240,252,242}{195,230,205}
+\sectiontitle{Feedforward Networks}
+
+\subsectiontitle{Linear Models}
+
+\begin{subsubsectionbox}{Linear regression}
+$h[w](S) = \frac{1}{2s}\|Xw - y\|^2$, $\nabla h = 2X^\top Xw - 2X^\top y$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Moore-Penrose inverse solution}
+$w^* = X^+ y \in \argmin_w h[w]$ where $X^+ := \lim_{\epsilon \to 0} (X^\top X + \epsilon I)^{-1} X^\top$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{SGD update}
+$w_{t+1} := w_t + \eta (y_{i_t} - w_t^\top x_{i_t}) x_{i_t}$ with $i_t \stackrel{\text{iid}}{\sim} \Uniform(1,\ldots,s)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Gaussian noise model}
+$y_i = w^\top x_i + \epsilon_i$, $\epsilon_i \sim \N(0, \sigma^2)$. Least squares $\equiv$ neg log likelihood.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Ridge regression}
+$h_\lambda[w] := h[w] + \frac{\lambda}{2}\|w\|^2$, $w^* = (XX^\top + \lambda I)^{-1} X^\top y$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Logistic function}
+$\sigma(z) = \frac{1}{1+e^{-z}}$, $\sigma(z) + \sigma(-z) = 1$, $\sigma' = \sigma(1 - \sigma)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Cross entropy loss}
+$\ell(y, z) = -y \log \sigma(z) - (1 - y) \log(1 - \sigma(z)) = -\log \sigma((2y - 1)z)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Logistic regression gradient}
+$\nabla \ell_i = [\sigma(w^\top x_i) - y_i] x_i$
+\end{subsubsectionbox}
+
+\subsectiontitle{Feedforward Networks}
+
+\begin{subsubsectionbox}{Generic feedforward layer}
+$F : \R^{m(n+1)} \times \R^n \to \R^m$, $F[\theta](x) := \varphi(Wx + b)$, $\theta := \vec(W, b)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Composition of layers}
+$G = F_L[\theta_L] \circ \cdots \circ F_1[\theta_1]$ where $F_l[W^l, b^l](x) := \varphi_l(W^l x + b^l)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Layer activations}
+$x^l := (F_l \circ \cdots \circ F_1)(x) = F_l(x^{l-1})$, $x^0 = x$, $x^L = F(x)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Softmax function}
+$\softmax(z)_i = \frac{e^{z_i}}{\sum_j e^{z_j}}$, $\ell(y; z) = \left[-zy + \log\sum_j e^{z_j}\right] \frac{1}{\ln 2}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Residual layer}
+$F[W, b](x) = x + [\varphi(Wx + b) - \varphi(0)]$, therefore $F[0, 0] = \text{id}$
+\end{subsubsectionbox}
+
+\subsectiontitle{Sigmoid Networks}
+
+\begin{subsubsectionbox}{Sigmoid/Tanh activations}
+$\sigma(z) = \frac{1}{1+e^{-z}}$, $\tanh(z) = 2\sigma(2z) - 1$, $\tanh'(z) = 1 - \tanh^2(z)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Barron's Theorem}
+For $f$ with finite $C_f := \int \|\omega\| |\hat{f}(\omega)| d\omega$, $\exists$ MLP $g$ with width $m$: $\int_{B} (f - g_m)^2 \mu(dx) \leq O(1/m)$
+\end{subsubsectionbox}
+
+\subsectiontitle{ReLU Networks}
+
+\begin{subsubsectionbox}{ReLU activation}
+$\varphi(z) := (z)_+ := \max\{0, z\}$. ReLU networks are universal function approximators.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Zaslavsky: Connected regions}
+$R(H) \leq \sum_{i=0}^{\min\{n,m\}} \binom{m}{i} := R(m)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Montufar: Connected regions}
+$R(m, L) \geq R(m) \left\lfloor \frac{m}{n} \right\rfloor^{n(L-1)}$ ($L$: layers, $m$: width)
+\end{subsubsectionbox}
+

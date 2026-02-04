@@ -1,0 +1,58 @@
+% Purple color scheme
+\setsectioncolors{130,90,160}{150,110,175}{248,242,255}{220,205,240}
+\sectiontitle{Convolutional Networks}
+
+\subsectiontitle{Convolutions}
+
+\begin{subsubsectionbox}{Convolution definition}
+$(f * g)(u) := \int_{-\infty}^{\infty} g(u-t)f(t)dt = \int_{-\infty}^{\infty} f(u-t)g(t)dt$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Fourier property}
+$\mathcal{F}(f * g) = \mathcal{F}(f) \cdot \mathcal{F}(g)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Discrete convolution}
+$(f * g)[u] := \sum_{t=-\infty}^{\infty} f[t]g[u - t]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Cross-correlation}
+$(g \star f)[u] := \sum_{t=-\infty}^{\infty} g[t]f[u + t]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Toeplitz matrices}
+$(f * g) = \text{Toeplitz-Matrix}(g)f$
+\end{subsubsectionbox}
+
+\subsectiontitle{Convolutional Networks}
+
+\begin{subsubsectionbox}{Conventions}
+Padding: Add zeros around input. Stride: Step size of convolution.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Max-Pooling}
+Take maximum value in windows (size $r$)
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{ConvNets for Images}
+$y[r][s, t] = \sum_u \sum_{s',t'} w[r, u][s', t'] \cdot x[u][s + s', t + t']$ ($r$: output channel, $u$: input channel)
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Parameters count}
+$D = \#r \cdot \#u \cdot \#s' \cdot \#t'$ (channels $\times$ window size)
+\end{subsubsectionbox}
+
+\subsectiontitle{NLP with ConvNets}
+
+\begin{subsubsectionbox}{Word embedding}
+word $\omega \mapsto x_\omega \in \R^n$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Conditional log-bilinear model}
+$P(\nu | \omega) = \frac{\exp[x_\omega^\top y_\nu]}{\sum_\mu \exp[x_\omega^\top y_\mu]}$, $\ell_{\omega,\nu} = -x_\omega^\top y_\nu + \ln\sum_\mu \exp[x_\omega^\top y_\mu]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Negative sampling}
+$\tilde{\ell}_{\omega,\nu} = -\ln \sigma(x_\omega^\top y_\nu) - \beta \E_{\mu \sim D} \ln(1 - \sigma(x_\omega^\top y_\mu))$
+\end{subsubsectionbox}
+

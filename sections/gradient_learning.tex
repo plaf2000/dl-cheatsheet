@@ -1,0 +1,72 @@
+% Orange color scheme
+\setsectioncolors{200,120,50}{180,130,70}{255,248,240}{250,220,190}
+\sectiontitle{Gradient-Based Learning}
+
+\subsectiontitle{Backpropagation}
+
+\begin{subsubsectionbox}{Parameter derivatives}
+$\frac{\partial x_i^l}{\partial w_{ij}^l} = \dot{\varphi}_i^l x_j^{l-1}$, $\frac{\partial x_i^l}{\partial b_i^l} = \dot{\varphi}_i^l$ where $\dot{\varphi}_i^l := \varphi'^l((w_i^l)^\top x^{l-1} + b_i^l)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Loss derivatives}
+$\frac{\partial h}{\partial w_{ij}^l} = \delta_i^l \dot{\varphi}_i^l x_j^{l-1}$, $\frac{\partial h}{\partial b_i^l} = \delta_i^l \dot{\varphi}_i^l$ with $\delta_i^l = \frac{\partial h}{\partial x_i^l} \dot{\varphi}_i^l$
+\end{subsubsectionbox}
+
+\subsectiontitle{Gradient Descent}
+
+\begin{subsubsectionbox}{GD update \& flow}
+$\theta_{t+1} = \theta_t - \eta \nabla h(\theta_t)$, ODE: $\frac{d\theta}{dt} = -\nabla h(\theta)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{$L$-smoothness}
+$\|\nabla h(\theta_1) - \nabla h(\theta_2)\| \leq L \|\theta_1 - \theta_2\|$, $\lambda_{\max}(\nabla^2 h) \leq L$
+
+$\ell(w) - \ell(w') \leq \nabla \ell(w')^\top (w - w') + \frac{L}{2}\|w - w'\|_2^2$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Polyak-Łojasiewicz}
+$\frac{1}{2}\|\nabla h(\theta)\|^2 \geq \mu(h(\theta) - \min h)$ $(\forall \theta)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Convergence rate}
+$\eta = 1/L \Rightarrow t = \frac{2L}{\epsilon^2}(h(\theta^0) - \min h)$ for $\epsilon$-critical. With PL: $h(\theta^t) - \min h \leq (1 - \frac{\mu}{L})^t (h(\theta^0) - \min h)$
+\end{subsubsectionbox}
+
+\subsectiontitle{Acceleration and Adaptivity}
+
+\begin{subsubsectionbox}{Heavy ball momentum}
+$\theta_{t+1} = \theta_t - \eta \nabla h(\theta_t) + \beta(\theta_t - \theta_{t-1})$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Nesterov acceleration}
+$\tilde{\theta}_{t+1} = \theta_t + \beta(\theta_t - \theta_{t-1})$, $\theta_{t+1} = \tilde{\theta}_{t+1} - \eta \nabla h(\tilde{\theta}_{t+1})$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{AdaGrad}
+$\theta_{t+1}^i = \theta_t^i - \eta_t^i \partial_i h(\theta^t)$, $\nu_t^i = \nu_{t-1}^i + [\partial_i h]^2$, $\eta_t^i = \frac{\eta}{\sqrt{\nu_t^i + \epsilon}}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Adam}
+$g_t^i = \beta g_{t-1}^i + (1 - \beta)\partial_i h$, $\nu_t^i = \alpha \nu_{t-1}^i + (1 - \alpha)[\partial_i h]^2$, $\theta_{t+1}^i = \theta_t^i - \frac{\eta}{\sqrt{\nu_t^i + \epsilon}} g_t^i$
+\end{subsubsectionbox}
+
+\subsectiontitle{SGD}
+
+\begin{subsubsectionbox}{SGD update \& variance}
+$\theta_{t+1} = \theta_t - \eta \nabla h(\theta^t)(x_{i_t}, y_{i_t})$, $V[\theta] = \frac{1}{s}\sum_{i=1}^s \|\nabla h(S) - \nabla h(x_i, y_i)\|^2$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{SGD convergence}
+General: $O(1/\sqrt{t})$, Strongly convex: $O(\log t/t)$, Additionally smooth: $O(1/t)$
+\end{subsubsectionbox}
+
+\subsectiontitle{Function properties}
+
+\begin{subsubsectionbox}{Convexity}
+$\ell(\lambda w + (1 - \lambda)w') \leq \lambda \ell(w) + (1 - \lambda)\ell(w')$, $\ell''(x) \geq 0$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Strong convexity}
+$\ell(w) \geq \ell(w') + \nabla \ell(w')^\top (w - w') + \frac{\mu}{2}\|w - w'\|_2^2$, $\ell''(x) \geq \mu$
+\end{subsubsectionbox}
+

@@ -1,0 +1,114 @@
+% Dark Blue color scheme
+\setsectioncolors{60,80,140}{85,105,160}{238,240,252}{195,205,235}
+\sectiontitle{Theory}
+
+\subsectiontitle{Infinite Width (NTK)}
+
+\begin{subsubsectionbox}{Neural tangent kernel}
+$K(\vx, \vx') := \langle \nabla_\theta F(\vx; \theta), \nabla_\theta F(\vx'; \theta) \rangle$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Gradient flow}
+$\dot{F}_t = -K_t (F_t - Y)$, $K_t := K(X, X; \theta_t)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Linearized network}
+$\bar{F}(x) = F(x; \theta_0) + \nabla_\theta F(x; \theta_0)^\top (\theta - \theta_0)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Lazy training}
+If width $n \to \infty$: $K_t \to K_0$ (deterministic), $F_t \to \bar{F}_t$ (linear dynamics).
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Kernel regression solution}
+$\bar{F}_\infty = K_0(K_0 + \lambda I)^{-1}Y$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Function space}
+$\bar{F} \in \cH_K$ (RKHS), $\|\bar{F}\|_{\cH_K}^2 = \theta^\top \theta$
+\end{subsubsectionbox}
+
+\subsectiontitle{Bayesian DNNs}
+
+\begin{subsubsectionbox}{Prior}
+$p(\theta) = \N(0, \sigma_p^2 I)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Likelihood}
+$p(y|x,\theta) = \N(F(x;\theta), \sigma^2)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Posterior (Laplace approx.)}
+$p(\theta|\cD) \approx \N(\theta^*, H^{-1})$, $H = \nabla^2 \cL(\theta^*)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Predictive distribution}
+$p(y|x,\cD) = \int p(y|x,\theta)p(\theta|\cD)d\theta$
+\end{subsubsectionbox}
+
+\subsectiontitle{GPs \& Infinite Width}
+
+\begin{subsubsectionbox}{NNGP kernel}
+$K_{\text{NNGP}}(\vx, \vx') = \E_{\theta}[F(\vx;\theta)F(\vx';\theta)]$ as width $\to \infty$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{GP prior}
+$F \sim \cG\cP(0, K_{\text{NNGP}})$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Recursive kernel}
+$K^{(l+1)} = \sigma_w^2 \E_{(u,v)\sim\N(0,\Sigma^{(l)})}[\phi(u)\phi(v)] + \sigma_b^2$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{GP posterior}
+$F|\cD \sim \cG\cP(\mu_*, K_*)$, $\mu_* = K_{*X}(K_{XX}+\sigma^2I)^{-1}Y$
+\end{subsubsectionbox}
+
+\subsectiontitle{Statistical Learning Theory}
+
+\begin{subsubsectionbox}{Generalization gap}
+$\cR(f) - \hat{\cR}(f) = \E_{x,y}[\ell(f(x),y)] - \frac{1}{n}\sum_i \ell(f(x_i),y_i)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{PAC bound}
+$\P[\cR(f) - \hat{\cR}(f) \leq \epsilon] \geq 1 - \delta$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{VC dimension}
+Largest $n$ s.t. $\exists$ data shattered by $\cF$. For linear: $d+1$.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Rademacher complexity}
+$\cR_n(\cF) = \E_{\sigma,S}[\sup_{f\in\cF}\frac{1}{n}\sum_i \sigma_i f(x_i)]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Generalization bound}
+$\cR(f) \leq \hat{\cR}(f) + 2\cR_n(\cF) + \sqrt{\frac{\ln(1/\delta)}{2n}}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Bias-variance tradeoff}
+$\E[(f(x)-y)^2] = \text{Bias}^2 + \text{Var} + \sigma^2$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Double descent}
+Test error: U-shaped in classical regime, second descent in overparameterized regime.
+\end{subsubsectionbox}
+
+\subsectiontitle{Loss Landscape}
+
+\begin{subsubsectionbox}{Critical points}
+$\nabla \cL(\theta^*) = 0$. Local min: $H \succeq 0$. Saddle: $H$ indefinite.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Sharpness}
+$\lambda_{\max}(H)$. Flat minima $\to$ better generalization.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Mode connectivity}
+Local minima connected by paths of low loss.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Lottery ticket hypothesis}
+Sparse subnetworks can match full network performance if initialized correctly.
+\end{subsubsectionbox}
+

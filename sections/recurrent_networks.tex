@@ -1,0 +1,66 @@
+% Teal color scheme
+\setsectioncolors{50,140,140}{70,155,155}{235,250,250}{180,225,225}
+\sectiontitle{Recurrent Networks}
+
+\subsectiontitle{Simple RNNs}
+
+\begin{subsubsectionbox}{Time evolution}
+$z_t := F[\theta](z_{t-1}, x_t)$, $z_0 := 0$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Output map}
+$\hat{y}_t := G[\psi](z_t)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{RNN parameterization}
+$F[U, V](z, x) := \varphi(Uz + Vx)$, $G[W](z) := \Phi(Wz)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{BPTT}
+$\frac{\partial h}{\partial v_{ij}} = \sum_{t=1}^T \frac{\partial h}{\partial z_i^t} \dot{\varphi}_i^t x_j^t$, $\frac{\partial h}{\partial u_{ij}} = \sum_{t=1}^T \frac{\partial h}{\partial z_i^t} \dot{\varphi}_i^t z_j^{t-1}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Spectral norm}
+$\|A\|_2 = \max_{x:\|x\|=1} \|Ax\|_2 = \sigma_1(A)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Gradient norms}
+$\frac{\partial z_T}{\partial z_0} = \dot{\Phi}^T U \cdots \dot{\Phi}^1 U$. Vanishes if $\sigma_1(U) < 1/\kappa$, explodes if $\sigma_1(U)$ too large.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Bidirectional RNNs}
+$\hat{y}_t = \Phi(Wz_t + \tilde{W}\tilde{z}_t)$
+\end{subsubsectionbox}
+
+\subsectiontitle{Gated Memory}
+
+\begin{subsubsectionbox}{LSTM}
+$z_t := \sigma(F\tilde{x}_t) \odot z_{t-1} + \sigma(G\tilde{x}_t) \odot \tanh(V\tilde{x}_t)$, $\tilde{x}_t := [x_t, \ell_t]$, $\ell_{t+1} = \sigma(H\tilde{x}_t) \odot \tanh(Uz_t)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{GRU}
+$z_t = (1 - \sigma) \odot z_{t-1} + \sigma \odot \tilde{z}_t$, $\sigma := \sigma(G[x_t, z_{t-1}])$, $\tilde{z}_t := \tanh(V[\ell_t \odot z_{t-1}, x_t])$
+\end{subsubsectionbox}
+
+\subsectiontitle{Linear Recurrent Models}
+
+\begin{subsubsectionbox}{Linear state evolution}
+$z_{t+1} = Az_t + Bx_t$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Diagonal form}
+$A = P\Lambda P^{-1}$, $\Lambda := \diag(\lambda_1,\ldots,\lambda_m)$, $\lambda_i \in \mathbb{C}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Stability}
+$\max_j |\lambda_j| \leq 1$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Initialization}
+$\lambda_i = \exp(-\exp(\xi_i) + i\theta_i)$, $\theta_i \sim \text{Uni}[0; 2\pi]$, $r_i \sim \text{Uni}[I]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Advantages}
+(i) clear long/short range dependencies (ii) no channel mixing required (iii) parallelizable training
+\end{subsubsectionbox}
+

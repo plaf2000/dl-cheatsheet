@@ -1,0 +1,30 @@
+% Cyan color scheme
+\setsectioncolors{50,130,160}{75,150,175}{235,250,255}{185,225,240}
+\sectiontitle{Ethics}
+
+\subsectiontitle{Adversarial Examples}
+
+\begin{subsubsectionbox}{Adversarial perturbation}
+$x' = x + \delta$, $\|\delta\|_p \leq \epsilon$, $F(x') \neq F(x)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{FGSM (Fast Gradient Sign Method)}
+$\delta = \epsilon \cdot \text{sign}(\nabla_x \cL(x, y))$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{PGD (Projected Gradient Descent)}
+$x^{t+1} = \Pi_{B_\epsilon(x)}[x^t + \alpha \cdot \text{sign}(\nabla_x \cL(x^t, y))]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Adversarial training}
+$\min_\theta \E_{x,y}[\max_{\|\delta\| \leq \epsilon} \cL(x + \delta, y; \theta)]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Certified robustness}
+Provable guarantees via randomized smoothing, interval bound propagation.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Transferability}
+Adversarial examples often transfer between models.
+\end{subsubsectionbox}
+

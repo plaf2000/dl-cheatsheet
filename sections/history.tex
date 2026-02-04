@@ -1,0 +1,58 @@
+% Blue color scheme
+\setsectioncolors{70,130,180}{100,150,190}{240,248,255}{200,225,245}
+\sectiontitle{History}
+
+\subsectiontitle{Perceptron}
+
+\begin{subsubsectionbox}{Threshold Unit}
+$f[w, b](x) = \sign(x \cdot w + b)$ where $x \cdot w := \sum_{i=1}^n x_i w_i$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Decision Boundary}
+$x \cdot w + b \neq 0 \Leftrightarrow \frac{x \cdot w}{\|w\|} + \frac{b}{\|w\|} \neq 0$
+
+$x \cdot w + b = \begin{bmatrix} x \\ 1 \end{bmatrix} \cdot \begin{bmatrix} w \\ b \end{bmatrix} =: \tilde{x} \cdot \tilde{w}, \quad \tilde{x}, \tilde{w} \in \R^{n+1}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Geometric Margin}
+$\gamma[w, b](x, y) := \frac{y(x \cdot w + b)}{\|w\|}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Maximum Margin Classifier}
+$(w^*, b^*) \in \argmax_{w,b} \gamma[w, b](S)$ with $\gamma[w, b](S) := \min_{(x,y) \in S} \gamma[w, b](x, y)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Perceptron Learning}
+if $f[w, b](x) \neq y$: update $w \leftarrow w + yx$, and $b \leftarrow b + y$
+
+$w_0 \in \text{span}(x_1,\ldots,x_s) \Rightarrow w_t \in \text{span}(x_1,\ldots,x_s) (\forall t)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Convergence}
+$\exists w, \|w\| = 1$, that $\gamma[w](S) = \gamma > 0 \Rightarrow w_t \cdot w \geq t\gamma$.
+
+$R = \max_{x \in S} \|x\| \Rightarrow \|w_t\| \leq R\sqrt{t}$
+
+$\cos \angle(u, w_t) = \frac{u \cdot w_t}{\|w_t\|} \geq \frac{\sqrt{t}\gamma}{tR} = \frac{\gamma}{R\sqrt{t}} \leq 1 \Rightarrow t \leq \frac{R^2}{\gamma^2}$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Covers Theorem}
+$C(s + 1, n) = 2\sum_{i=0}^{n-1} \binom{s}{i}$
+
+$C(S, n)$: Number of ways to separate $S$ with $n$ dimensions. $C(s, n) = 2s$ for $s \leq n$
+
+Phase transition at $s = 2n$. For $s > 2n$ empty version space is the exception.
+\end{subsubsectionbox}
+
+\subsectiontitle{Hopfield Networks}
+
+\begin{subsubsectionbox}{Hopfield Model}
+$E(X) = -\frac{1}{2}\sum_{i \neq j} w_{ij} X_i X_j + \sum_i b_i X_i$ where $X_i \in \{-1, +1\}$
+
+$w_{ij} = w_{ji}$ $(\forall i, j)$, $w_{ii} = 0$ $(\forall i)$: Interaction strengths
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Hebbian Learning}
+$x^t \in \{\pm 1\}^n$ $(1 \leq t \leq s)$, $w_{ij} = \frac{1}{n}\sum_{t=1}^s x_i^t x_j^t$, $W = \frac{1}{n}\sum_{t=1}^s x^t (x^t)^\top$
+\end{subsubsectionbox}
+
