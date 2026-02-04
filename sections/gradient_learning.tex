@@ -46,8 +46,8 @@ More theoretical grounding than heavy ball.
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{AdaGrad}
-$\theta^{t+1}_i = \theta^t_i - \eta^t_i \partial_i h(\theta^t)$, $\nu^t_i = \nu^{t-1}_i + [\partial_i h(\theta^t)]^2$\\
-$\eta^t_i = \frac{\eta}{\sqrt{\nu^t_i} + \epsilon}$
+$\nu^t_i = \nu^{t-1}_i + [\partial_i h(\theta^t)]^2$, $\eta^t_i = \frac{\eta}{\sqrt{\nu^t_i} + \epsilon}$\\
+$\theta^{t+1}_i = \theta^t_i - \eta^t_i \partial_i h(\theta^t)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Adam}
