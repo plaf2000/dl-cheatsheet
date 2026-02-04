@@ -60,6 +60,10 @@
 \definecolor{currentsubsubsectionbg}{RGB}{200,220,240}
 \definecolor{currentsubsubsectionframe}{RGB}{135,180,220}
 
+\newenvironment{nscenter}
+ {\parskip=0pt\par\nopagebreak\centering}
+ {\par\noindent\ignorespacesafterend}
+
 % Command to set section colors (called at start of each section file)
 \newcommand{\setsectioncolors}[4]{%
     \definecolor{currentsectionbg}{RGB}{#1}%

@@ -37,32 +37,48 @@ $\eta = 1/L \Rightarrow t = \frac{2L}{\epsilon^2}(h(\theta^0) - \min h)$ for $\e
 \subsectiontitle{Acceleration and Adaptivity}
 
 \begin{subsubsectionbox}{Heavy ball momentum}
-$\theta_{t+1} = \theta_t - \eta \nabla h(\theta_t) + \beta(\theta_t - \theta_{t-1})$
+$\theta^{t+1} = \theta^t - \eta \nabla h(\theta^t) + \beta(\theta^t - \theta^{t-1})$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Nesterov acceleration}
-$\tilde{\theta}_{t+1} = \theta_t + \beta(\theta_t - \theta_{t-1})$, $\theta_{t+1} = \tilde{\theta}_{t+1} - \eta \nabla h(\tilde{\theta}_{t+1})$
+$\tilde{\theta}^{t+1} = \theta^t + \beta(\theta^t - \theta^{t-1})$, $\theta^{t+1} = \tilde{\theta}^{t+1} - \eta \nabla h(\tilde{\theta}^{t+1})$
+More theoretical grounding than heavy ball.
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{AdaGrad}
-$\theta_{t+1}^i = \theta_t^i - \eta_t^i \partial_i h(\theta^t)$, $\nu_t^i = \nu_{t-1}^i + [\partial_i h]^2$, $\eta_t^i = \frac{\eta}{\sqrt{\nu_t^i + \epsilon}}$
+$\theta^{t+1}_i = \theta^t_i - \eta^t_i \partial_i h(\theta^t)$, $\nu^t_i = \nu^{t-1}_i + [\partial_i h(\theta^t)]^2$\\
+$\eta^t_i = \frac{\eta}{\sqrt{\nu^t_i} + \epsilon}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Adam}
-$g_t^i = \beta g_{t-1}^i + (1 - \beta)\partial_i h$, $\nu_t^i = \alpha \nu_{t-1}^i + (1 - \alpha)[\partial_i h]^2$, $\theta_{t+1}^i = \theta_t^i - \frac{\eta}{\sqrt{\nu_t^i + \epsilon}} g_t^i$
+$g^t_i = \beta g^{t-1}_i + (1 - \beta)\partial_i h(\theta^t)$\\
+$\nu^t_i = \alpha \nu^{t-1}_i + (1 - \alpha)[\partial_i h(\theta^t)]^2$\\
+$\theta^{t+1}_i = \theta^t_i - \frac{\eta}{\sqrt{\nu^t_i} + \epsilon} g^t_i$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{RMSprop}
 Adam without momentum term (set $\beta = 0$)
 \end{subsubsectionbox}
 
+\begin{subsubsectionbox}{Muon}
+  $M^t = \mu_1 M^{t-1} + \nabla h(\theta^t)$\\
+  $P^t = \text{orthogonalize}(M^t)$\\
+  $\theta^{t+1} = \theta^t - \eta \sqrt{d_{\text{out}} / d_{\text{in}}} P^t$ 
+  $\text{orthogonalize}(A) = argmin_{B: B^\top B = I} \|A - B\|_F = UV^\top$ where $A = U\Sigma V^\top$ (truncated SVD).
+  Muon solves constrained opt. problem:\\
+  $\min_{\delta\theta} \langle \nabla \mathcal{L}(\theta), \Delta\theta\rangle_F + \frac12 \frac{d_\text{in}}{d_\text{out}} \|\Delta\theta\|_F^2$ s.t. $\|\Delta\theta\|_2 \leq 1$\\
+  whose solution is an update in direction of the \textit{top singular vectors}: $\Delta W \propto -UV^\top$
+\end{subsubsectionbox}
+
 \subsectiontitle{SGD}
 
 \begin{subsubsectionbox}{SGD update \& variance}
-$\theta_{t+1} = \theta_t - \eta \nabla h(\theta^t)(x_{i_t}, y_{i_t})$, $V[\theta] = \frac{1}{s}\sum_{i=1}^s \|\nabla h(S) - \nabla h(x_i, y_i)\|^2$
+$\theta_{t+1} = \theta_t - \eta \nabla h(\theta^t)(x_{i_t}, y_{i_t})$\\
+$V[\theta] = \frac{1}{s}\sum_{i=1}^s \|\nabla h(S) - \nabla h(x_i, y_i)\|^2$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{SGD convergence}
+    Convergence in expectation: $\E[h(\theta^t)] - \min h$\\
 General: $O(1/\sqrt{t})$, Strongly convex: $O(\log t/t)$, Additionally smooth: $O(1/t)$
 \end{subsubsectionbox}
 
@@ -75,6 +91,7 @@ $\ell(w) \geq \ell(w') + \nabla \ell(w')^\top (w - w')$ (differentiable case)
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Strong convexity}
-$\ell(w) \geq \ell(w') + \nabla \ell(w')^\top (w - w') + \frac{\mu}{2}\|w - w'\|_2^2$, $\ell''(x) \geq \mu$
+$\ell(w) \geq \ell(w') + \nabla \ell(w')^\top (w - w') + \frac{\mu}{2}\|w - w'\|_2^2$\\
+$\ell''(x) \geq \mu$
 \end{subsubsectionbox}
 

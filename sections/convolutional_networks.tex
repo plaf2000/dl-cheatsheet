@@ -5,7 +5,12 @@
 \subsectiontitle{Convolutions}
 
 \begin{subsubsectionbox}{Convolution definition}
-$(f * g)(u) := \int_{-\infty}^{\infty} g(u-t)f(t)dt = \int_{-\infty}^{\infty} f(u-t)g(t)dt$
+$(f * g)(u) := \int_{-\infty}^{\infty} g(u-t)f(t)dt$
+\end{subsubsectionbox}
+
+
+\begin{subsubsectionbox}{Cross-correlation}
+$(f \star g)(u) := \int_{-\infty}^{\infty} g(u+t)f(t)dt$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Fourier property}
@@ -16,13 +21,34 @@ $\mathcal{F}(f * g) = \mathcal{F}(f) \cdot \mathcal{F}(g)$
 $(f * g)[u] := \sum_{t=-\infty}^{\infty} f[t]g[u - t]$
 \end{subsubsectionbox}
 
-\begin{subsubsectionbox}{Cross-correlation}
+\begin{subsubsectionbox}{Discrete cross-correlation}
 $(g \star f)[u] := \sum_{t=-\infty}^{\infty} g[t]f[u + t]$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Toeplitz matrices}
-$(f * g) = \text{Toeplitz-Matrix}(g)f$
+$(f * g) = \text{Toeplitz-Matrix}(g)f$\\
+$G = \text{Toeplitz-Matrix}(g)$:\\
+$\begin{bmatrix}
+g[0] & g[-1] & g[-2] & \cdots & g[-(n-1)] \\
+g[1] & g[0] & g[-1] & \ddots & g[-(n-2)]\\
+g[2] & g[1] & g[0] & \ddots & \vdots\\
+\vdots & \ddots & \ddots & \ddots & g[-1] \\
+g[n-1] & g[n-2] & \cdots & g[1] & g[0] \\
+\end{bmatrix}$ \\
+Then $G_{ij} = g[i-j]$
 \end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Properties of Convolutions}
+$(f * g)(u) = (g * f)(u) \implies *$ is commutative\\
+$(f \star g)(u) = (g \star f)(-u) \implies \star$ is not\\
+$(f \star g)(y) = (\mathcal{T}(f) * g)(y)$ with $(\mathcal{T}(f))(u) = f(-u)$\\
+$\mathcal{S}_t(f * g)(u) = (\mathcal{S}_t(f) * g)(u) = (f * \mathcal{S}_t(g))(u)$ with $\mathcal{S}_t(f)(u) = f(u - t)$ $\implies$ * is equivariant under $\mathcal{S}_t$\\
+$\mathcal{A}$ is a continuos linear operator. Then
+\begin{nscenter}
+$\mathcal{A}$ equivariant under translations $\iff$ $\mathcal{A}$ is a convolution: $\exists g$ s.t. $\mathcal{A}(f) = f * g$
+\end{nscenter}
+\end{subsubsectionbox}
+
 
 \subsectiontitle{Convolutional Networks}
 
