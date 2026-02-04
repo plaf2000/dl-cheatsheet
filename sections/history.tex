@@ -9,9 +9,9 @@ $f[w, b](x) = \sign(x \cdot w + b)$ where $x \cdot w := \sum_{i=1}^n x_i w_i$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Decision Boundary}
-$x \cdot w + b \neq 0 \Leftrightarrow \frac{x \cdot w}{\|w\|} + \frac{b}{\|w\|} \neq 0$
+$x \cdot w + b = 0 \Leftrightarrow \frac{x \cdot w}{\|w\|} + \frac{b}{\|w\|} = 0$
 
-$x \cdot w + b = \begin{bmatrix} x \\ 1 \end{bmatrix} \cdot \begin{bmatrix} w \\ b \end{bmatrix} =: \tilde{x} \cdot \tilde{w}, \quad \tilde{x}, \tilde{w} \in \R^{n+1}$
+$x \cdot w - b = \begin{pmatrix} x \\ -1 \end{pmatrix} \cdot \begin{pmatrix} w \\ b \end{pmatrix} =: \tilde{x} \cdot \tilde{w}, \quad \tilde{x}, \tilde{w} \in \R^{n+1}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Geometric Margin}
@@ -33,7 +33,7 @@ $\exists w, \|w\| = 1$, that $\gamma[w](S) = \gamma > 0 \Rightarrow w_t \cdot w 
 
 $R = \max_{x \in S} \|x\| \Rightarrow \|w_t\| \leq R\sqrt{t}$
 
-$\cos \angle(u, w_t) = \frac{u \cdot w_t}{\|w_t\|} \geq \frac{\sqrt{t}\gamma}{tR} = \frac{\gamma}{R\sqrt{t}} \leq 1 \Rightarrow t \leq \frac{R^2}{\gamma^2}$
+$\cos \angle(w, w_t) = \frac{w \cdot w_t}{\|w_t\|} \geq \frac{t\gamma}{\sqrt{t}R} = \frac{\sqrt{t}\gamma}{R} \leq 1 \Rightarrow t \leq \frac{R^2}{\gamma^2}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Covers Theorem}

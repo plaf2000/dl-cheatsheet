@@ -4,12 +4,30 @@
 
 \subsectiontitle{Variational Auto Encoders}
 
+\begin{subsubsectionbox}{Linear autoencoder}
+$x \mapsto z = Cx$, $z \mapsto \hat{x} = Dz$, $E(C,D)(x) = \frac{1}{2}\|x - DCx\|^2$
+
+$DCX = \hat{X} = U\Sigma_m V^\top$, for centered data $\equiv$ PCA
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Linear factor analysis}
+$x = \mu + Wz + \eta$, $\eta \sim \N(0, \Psi)$, $x \sim \N(\mu, WW^\top + \Psi)$ for $z \sim \N(0,I)$
+
+$\mu_{z|x} = W^\top(WW^\top + \Psi)^{-1}(x - \mu)$
+\end{subsubsectionbox}
+
 \begin{subsubsectionbox}{Generative model}
 $p_\theta(x,z) = p_\theta(x|z)p(z)$, $p(z) = \N(0,I)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{ELBO}
-$\ln p_\theta(x) \geq \E_{q_\phi(z|x)}[\ln p_\theta(x|z)] - D_{KL}(q_\phi(z|x) \| p(z))$
+$\log p(\theta)(x) = \log \int q(z)p(\theta)(x|z)\frac{p(z)}{q(z)}dz$
+
+$\geq \int q(z)\log p(\theta)(x|z)dz - D_{KL}(q\|p) =: L(\theta, q)(x)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Inference network}
+$z \sim \N(\mu(x), \Sigma(x))$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Encoder}
@@ -43,19 +61,23 @@ $D: x \mapsto [0,1]$, probability that $x$ is real
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{GAN objective}
-$\min_G \max_D \E_{x \sim p_{\text{data}}}[\ln D(x)] + \E_{z \sim p(z)}[\ln(1 - D(G(z)))]$
+$V(G,D) = \E_{x_r \sim p_{\text{data}}}[D(x_r)] + \E_{z \sim p_z}[1 - D(G(z))]$
 \end{subsubsectionbox}
 
-\begin{subsubsectionbox}{Optimal discriminator}
-$D^*(x) = \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_G(x)}$
+\begin{subsubsectionbox}{Bayes-optimal classifier}
+$q_\theta(x) := P\{y=1|x\} = \frac{p(x)}{p(x) + p_\theta(x)}$
 \end{subsubsectionbox}
 
-\begin{subsubsectionbox}{Generator loss (non-saturating)}
-$\cL_G = -\E_z[\ln D(G(z))]$
+\begin{subsubsectionbox}{Jensen-Shannon objective}
+$\ell^* = \text{JS}(p, p_\theta) - \ln 2$
+
+$\ell^*(\theta) \geq \sup_{\phi} \ell(\theta, \phi)$ where $\phi$: discriminator, $\theta$: generator
 \end{subsubsectionbox}
 
-\begin{subsubsectionbox}{Mode collapse}
-$G$ produces limited diversity. Solutions: minibatch discrimination, feature matching.
+\begin{subsubsectionbox}{Alternating gradient descent}
+$\theta_{t+1} = \theta_t - \eta \nabla_\theta \ell(\theta_t, \phi_t)$
+
+$\phi_{t+1} = \phi_t + \eta \nabla_\phi \ell(\theta^{t+1}, \phi_t)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Wasserstein GAN}
@@ -73,19 +95,35 @@ $q(x_t|x_{t-1}) = \N(x_t; \sqrt{1-\beta_t}x_{t-1}, \beta_t I)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Marginal}
-$q(x_t|x_0) = \N(x_t; \sqrt{\bar{\alpha}_t}x_0, (1-\bar{\alpha}_t)I)$, $\bar{\alpha}_t = \prod_{s=1}^t (1-\beta_s)$
+$q(x_t|x_0) = \N(\sqrt{\bar{\alpha}_t}x_0, \bar{\beta}_t I)$, $\bar{\alpha}_t = \prod_{\tau=1}^t (1-\beta_\tau)$, $\bar{\beta}_t = 1 - \bar{\alpha}_t$
+
+$\nu_t \approx \N(\sqrt{\bar{\alpha}_t}x_0, \bar{\beta}_t I) \xrightarrow{t\to\infty} \N(0,I)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Reverse process}
-$p_\theta(x_{t-1}|x_t) = \N(x_{t-1}; \mu_\theta(x_t, t), \sigma_t^2 I)$
+$p_\theta(x_{t-1}|x_t) = \N(m_\theta(x_t, t), \Sigma(x_t, t))$
+
+Forward: $\pi^* \to \nu_T = \pi$. Backward: $\pi \to \mu_0^\theta \approx \pi^*$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Training objective}
-$\cL = \E_{t,x_0,\epsilon}[\|\epsilon - \epsilon_\theta(x_t, t)\|^2]$
+$L_t = \frac{\|m(x_t, x_0, t) - m_\theta(x_t, t)\|^2}{2\sigma_t^2} + \text{const}$
+
+Reparameterization: $x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\epsilon$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Simplified criterion}
+$h(\theta)(x) = \frac{1}{T}\sum_{t=1}^T \E[\|\epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t}x + \sqrt{1-\bar{\alpha}_t}\epsilon, t)\|^2]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Forward trajectory target}
+$x_{t-1}|x_t, x_0 = \N(m(x_t, x_0, t), \tilde{\beta}_t I)$
+
+$m(x_t, x_0, t) = \frac{\sqrt{\bar{\alpha}_{t-1}}\beta_t}{1-\bar{\alpha}_t}x_0 + \frac{(1-\bar{\alpha}_{t-1})\sqrt{1-\beta_t}}{1-\bar{\alpha}_t}x_t$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Sampling}
-$x_{t-1} = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon_\theta(x_t,t)) + \sigma_t z$
+$m(x_t, x_0, t) = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon\right)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Score function}

@@ -5,7 +5,7 @@
 \subsectiontitle{Simple RNNs}
 
 \begin{subsubsectionbox}{Time evolution}
-$z_t := F[\theta](z_{t-1}, x_t)$, $z_0 := 0$
+$z_t := F[\theta](z_{t-1}, x_t)$, $z_0 := 0$ $(\forall t)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Output map}
@@ -13,10 +13,12 @@ $\hat{y}_t := G[\psi](z_t)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{RNN parameterization}
-$F[U, V](z, x) := \varphi(Uz + Vx)$, $G[W](z) := \Phi(Wz)$
+$F[U, V](z, x) := \varphi(Uz + Vx)$, $G[W](z) := \Phi(Wz)$, $W \in \R^{q \times m}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{BPTT}
+$\frac{\partial h}{\partial z_i^t} = \sum_{s=t}^T \sum_{k=1}^m \sum_j \frac{\partial \hat{y}_k^s}{\partial z_j^s} \frac{\partial z_j^s}{\partial z_i^t}$, $\frac{\partial \hat{y}_k^s}{\partial z_j^s} = \dot{\Phi}_k^s w_{kj}$
+
 $\frac{\partial h}{\partial v_{ij}} = \sum_{t=1}^T \frac{\partial h}{\partial z_i^t} \dot{\varphi}_i^t x_j^t$, $\frac{\partial h}{\partial u_{ij}} = \sum_{t=1}^T \frac{\partial h}{\partial z_i^t} \dot{\varphi}_i^t z_j^{t-1}$
 \end{subsubsectionbox}
 
@@ -39,7 +41,9 @@ $z_t := \sigma(F\tilde{x}_t) \odot z_{t-1} + \sigma(G\tilde{x}_t) \odot \tanh(V\
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{GRU}
-$z_t = (1 - \sigma) \odot z_{t-1} + \sigma \odot \tilde{z}_t$, $\sigma := \sigma(G[x_t, z_{t-1}])$, $\tilde{z}_t := \tanh(V[\ell_t \odot z_{t-1}, x_t])$
+$z_t = (1 - \sigma) \odot z_{t-1} + \sigma \odot \tilde{z}_t$, $\sigma := \sigma(G[x_t, z_{t-1}])$
+
+$\tilde{z}_t := \tanh(V[\ell_t \odot z_{t-1}, x_t])$, $\ell_t := \sigma(H[z_{t-1}, x_t])$
 \end{subsubsectionbox}
 
 \subsectiontitle{Linear Recurrent Models}
@@ -57,7 +61,9 @@ $\max_j |\lambda_j| \leq 1$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Initialization}
-$\lambda_i = \exp(-\exp(\xi_i) + i\theta_i)$, $\theta_i \sim \text{Uni}[0; 2\pi]$, $r_i \sim \text{Uni}[I]$
+$\lambda_i = \exp(-\exp(\nu_i) + i\theta_i)$, $e^{\nu_i} = -\ln r_i$
+
+$\theta_i \sim \text{Uni}[0; 2\pi]$, $r_i \sim \text{Uni}[I]$, $I \subseteq [0; 1]$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Advantages}

@@ -45,11 +45,13 @@ $D = \#r \cdot \#u \cdot \#s' \cdot \#t'$ (channels $\times$ window size)
 \subsectiontitle{NLP with ConvNets}
 
 \begin{subsubsectionbox}{Word embedding}
-word $\omega \mapsto x_\omega \in \R^n$
+$\omega \mapsto x_\omega \in \R^n$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Conditional log-bilinear model}
-$P(\nu | \omega) = \frac{\exp[x_\omega^\top y_\nu]}{\sum_\mu \exp[x_\omega^\top y_\mu]}$, $\ell_{\omega,\nu} = -x_\omega^\top y_\nu + \ln\sum_\mu \exp[x_\omega^\top y_\mu]$
+$P(\nu | \omega) = \frac{\exp[x_\omega^\top y_\nu]}{\sum_\mu \exp[x_\omega^\top y_\mu]}$
+
+$h(\{x_\omega\}, \{y_\nu\}) = \sum_{(\omega,\nu)} \ell_{\omega,\nu}$, $\ell_{\omega,\nu} = -x_\omega^\top y_\nu + \ln\sum_\mu \exp[x_\omega^\top y_\mu]$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Negative sampling}

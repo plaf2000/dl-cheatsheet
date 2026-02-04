@@ -21,11 +21,13 @@ $y_i = w^\top x_i + \epsilon_i$, $\epsilon_i \sim \N(0, \sigma^2)$. Least square
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Ridge regression}
-$h_\lambda[w] := h[w] + \frac{\lambda}{2}\|w\|^2$, $w^* = (XX^\top + \lambda I)^{-1} X^\top y$
+$h_\lambda[w] := h[w] + \frac{\lambda}{2}\|w\|^2$, $w^* = (X^\top X + \lambda I)^{-1} X^\top y$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Logistic function}
-$\sigma(z) = \frac{1}{1+e^{-z}}$, $\sigma(z) + \sigma(-z) = 1$, $\sigma' = \sigma(1 - \sigma)$
+$\sigma(z) = \frac{1}{1+e^{-z}}$, $\sigma(z) + \sigma(-z) = 1$
+
+$\sigma' = \sigma(1 - \sigma)$, $\sigma'' = \sigma(1-\sigma)(1-2\sigma)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Cross entropy loss}
@@ -51,17 +53,23 @@ $x^l := (F_l \circ \cdots \circ F_1)(x) = F_l(x^{l-1})$, $x^0 = x$, $x^L = F(x)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Softmax function}
-$\softmax(z)_i = \frac{e^{z_i}}{\sum_j e^{z_j}}$, $\ell(y; z) = \left[-zy + \log\sum_j e^{z_j}\right] \frac{1}{\ln 2}$
+$\softmax(z)_i = \frac{e^{z_i}}{\sum_j e^{z_j}}$, $\softmax(A)_{ij} = \frac{e^{A_{ij}}}{\sum_k e^{A_{ik}}}$
+
+$\ell(y; z) = \left[-zy + \log\sum_j e^{z_j}\right] \frac{1}{\ln 2}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Residual layer}
 $F[W, b](x) = x + [\varphi(Wx + b) - \varphi(0)]$, therefore $F[0, 0] = \text{id}$
 \end{subsubsectionbox}
 
+\begin{subsubsectionbox}{Skip connection}
+Concatenate previous layer back in
+\end{subsubsectionbox}
+
 \subsectiontitle{Sigmoid Networks}
 
 \begin{subsubsectionbox}{Sigmoid/Tanh activations}
-$\sigma(z) = \frac{1}{1+e^{-z}}$, $\tanh(z) = 2\sigma(2z) - 1$, $\tanh'(z) = 1 - \tanh^2(z)$
+$\sigma(z) = \frac{1}{1+e^{-z}}$, $\tanh(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}} = 2\sigma(2z) - 1$, $\tanh'(z) = 1 - \tanh^2(z)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Barron's Theorem}

@@ -6,18 +6,28 @@
 
 \begin{subsubsectionbox}{Adversarial perturbation}
 $x' = x + \delta$, $\|\delta\|_p \leq \epsilon$, $F(x') \neq F(x)$
+
+$\|x\|_p = (\sum_i |x_i|^p)^{1/p}$, $\|x\|_\infty = \max_i |x_i|$, $\|x\|_0 = |\{i : x_i \neq 0\}|$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{FGSM (Fast Gradient Sign Method)}
-$\delta = \epsilon \cdot \text{sign}(\nabla_x \cL(x, y))$
+$\delta = \epsilon \cdot \text{sign}(\nabla_x \cL(f(x), y))$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{PGD (Projected Gradient Descent)}
-$x^{t+1} = \Pi_{B_\epsilon(x)}[x^t + \alpha \cdot \text{sign}(\nabla_x \cL(x^t, y))]$
+$\eta^{t+1} = \Pi_\epsilon\left[\eta^t + \alpha \nabla_x \cL(f(x + \eta^t), y)\right]$
+
+$\Pi_\epsilon[z] := z/\|z\|_2$ for $p=2$, $\Pi_\epsilon[z] := z/\|z\|_\infty$ for $p=\infty$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Adversarial training}
-$\min_\theta \E_{x,y}[\max_{\|\delta\| \leq \epsilon} \cL(x + \delta, y; \theta)]$
+$\min_\theta \E_{x,y}[\max_{\|\delta\| \leq \epsilon} \cL(f(x + \delta), y; \theta)]$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{DeepFool (binary)}
+Optimal perturbation: $\eta \propto \text{sign}(f_1(x) - f_2(x))(w_2 - w_1)$
+
+for $f_i = w_i^\top x + b_i$. Iterate: $\arg\min_{\|\eta\|_2}$ s.t. $(\nabla f_1 - \nabla f_2)^\top \eta < f_1(x) - f_2(x)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Certified robustness}

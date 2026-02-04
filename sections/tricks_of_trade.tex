@@ -45,25 +45,35 @@ $\mu = \sigma^2/u^2$. Inverse proportional to signal-to-noise ratio.
 \subsectiontitle{Dropout}
 
 \begin{subsubsectionbox}{Dropout as Ensembling}
-$p(y | x) = \sum_{b \in \{0,1\}^R} p(b)p(y | x; b)$, $p(b) = \prod_i \phi_i^{b_i}(1 - \phi_i)^{1-b_i}$
+$p(y | x) = \sum_{b \in \{0,1\}^R} p(b)p(y | x; b)$, $p(b) = \prod_{i=1}^R \pi_i^{b_i}(1 - \pi_i)^{1-b_i}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Weight scaling for inference}
-$\tilde{w}_{ij} \leftarrow \phi_{ij} w_{ij}$
+$\tilde{w}_{ij} \leftarrow \pi_j w_{ij}$
 \end{subsubsectionbox}
 
 \subsectiontitle{Normalization}
 
 \begin{subsubsectionbox}{Batch normalization}
-$\bar{f} = \frac{f - \E[f]}{\sqrt{\V[f]}}$, $\bar{f}[\mu, \epsilon] = \mu + \epsilon\bar{f}$
+$\bar{f} = \frac{f - \E[f]}{\sqrt{\V[f]}}$, $\E[\bar{f}] = 0$, $\V[\bar{f}] = 1$
+
+$\bar{f}[\gamma, \beta] = \gamma + \beta\bar{f}$ (learnable)
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Weight normalization}
-$w := \frac{\epsilon}{\|v\|_2}v$, $\partial_\epsilon E = \nabla_w E \cdot \frac{v}{\|v\|_2}$
+$f(v, \epsilon)(x) = \varphi(w^\top x)$, $w := \frac{\epsilon}{\|v\|_2}v$
+
+$\partial_\epsilon E = \nabla_w E \cdot \frac{v}{\|v\|_2}$, $\nabla_v E = \frac{\epsilon}{\|v\|_2}\left(I - \frac{ww^\top}{\|w\|_2^2}\right)\nabla_w E$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Layer normalization}
 $\tilde{f}_i = \frac{f_i - \E[f]}{\sqrt{\V[f]}}$, $\E[f] = \frac{1}{m}\sum_i f_i$, $\V[f] = \frac{1}{m}\sum_i (f_i - \E[f])^2$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Reparameterization trick}
+$z = \mu + \Sigma^{1/2}\eta$, $\eta \sim \N(0, I)$
+
+$\nabla_\mu \E[f(z)] = \E[\nabla_z f(z)]$, $\nabla_\Sigma \E[f(z)] = \frac{1}{2}\E[\nabla_z^2 f(z)]$
 \end{subsubsectionbox}
 
 \subsectiontitle{Model Distillation}

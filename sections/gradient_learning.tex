@@ -19,7 +19,9 @@ $\theta_{t+1} = \theta_t - \eta \nabla h(\theta_t)$, ODE: $\frac{d\theta}{dt} = 
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{$L$-smoothness}
-$\|\nabla h(\theta_1) - \nabla h(\theta_2)\| \leq L \|\theta_1 - \theta_2\|$, $\lambda_{\max}(\nabla^2 h) \leq L$
+$\|\nabla h(\theta_1) - \nabla h(\theta_2)\| \leq L \|\theta_1 - \theta_2\|$ $(\forall \theta_1, \theta_2)$
+
+$\lambda_{\max}(\nabla^2 h) \leq L$, $\ell''(x) \leq L$
 
 $\ell(w) - \ell(w') \leq \nabla \ell(w')^\top (w - w') + \frac{L}{2}\|w - w'\|_2^2$
 \end{subsubsectionbox}
@@ -50,6 +52,10 @@ $\theta_{t+1}^i = \theta_t^i - \eta_t^i \partial_i h(\theta^t)$, $\nu_t^i = \nu_
 $g_t^i = \beta g_{t-1}^i + (1 - \beta)\partial_i h$, $\nu_t^i = \alpha \nu_{t-1}^i + (1 - \alpha)[\partial_i h]^2$, $\theta_{t+1}^i = \theta_t^i - \frac{\eta}{\sqrt{\nu_t^i + \epsilon}} g_t^i$
 \end{subsubsectionbox}
 
+\begin{subsubsectionbox}{RMSprop}
+Adam without momentum term (set $\beta = 0$)
+\end{subsubsectionbox}
+
 \subsectiontitle{SGD}
 
 \begin{subsubsectionbox}{SGD update \& variance}
@@ -63,7 +69,9 @@ General: $O(1/\sqrt{t})$, Strongly convex: $O(\log t/t)$, Additionally smooth: $
 \subsectiontitle{Function properties}
 
 \begin{subsubsectionbox}{Convexity}
-$\ell(\lambda w + (1 - \lambda)w') \leq \lambda \ell(w) + (1 - \lambda)\ell(w')$, $\ell''(x) \geq 0$
+$\ell(\lambda w + (1 - \lambda)w') \leq \lambda \ell(w) + (1 - \lambda)\ell(w')$, $\ell''(x) \geq 0$ $\forall x$
+
+$\ell(w) \geq \ell(w') + \nabla \ell(w')^\top (w - w')$ (differentiable case)
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Strong convexity}

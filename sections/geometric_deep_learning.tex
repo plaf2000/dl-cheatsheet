@@ -6,6 +6,8 @@
 
 \begin{subsubsectionbox}{Order-invariance}
 $f(x_1,\ldots,x_M) = f(x_{\pi_1},\ldots,x_{\pi_M})$ $\forall \pi \in S_M$
+
+Permutation invariant sum: $\sum_{m=1}^M x_m = \sum_{m=1}^M x_{\pi_m}$, $\forall M$, $\forall \pi \in S_M$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Equivariance}
@@ -13,11 +15,15 @@ $f(x_{\pi_1},\ldots,x_{\pi_M}) = (y_{\pi_1},\ldots,y_{\pi_M})$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Deep Sets model}
-$f(x_1,\ldots,x_M) = f^l(\sum_{m=1}^M \varphi(x_m))$
+$f(x_1,\ldots,x_M) = \rho\left(\sum_{m=1}^M \varphi(x_m)\right)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Max pooling variant}
+$f(x_1,\ldots,x_M) = \rho\left(\max_{m=1}^M \varphi(x_m)\right)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Equivariant map}
-$f^l : \R \times \R^N \to Y$, $(x_m, \sum_{k=1}^M \varphi(x_k)) \mapsto y_m$
+$\rho : \R \times \R^N \to Y$, $(x_m, \sum_{k=1}^M \varphi(x_k)) \mapsto y_m$
 \end{subsubsectionbox}
 
 \subsectiontitle{Graph Conv Networks}
@@ -43,10 +49,16 @@ $\bar{A} = D^{-1/2}(A + I)D^{-1/2}$, $D = \diag(d_m)$, $d_m = 1 + \sum_n a_{nm}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{GCN layer}
-$X^+ = \sigma(\bar{A}XW)$
+$X^+ = \sigma(\bar{A}XW)$, $W \in \R^{M \times N}$
+
+Two-layer GCN: $Y = \softmax\left(\bar{A}\sigma\left(\bar{A}XW^{(0)}\right)W^{(1)}\right)$
 \end{subsubsectionbox}
 
 \subsectiontitle{Spectral Graph Theory}
+
+\begin{subsubsectionbox}{Laplacian operator}
+$\Delta f := \sum_{n=1}^N \frac{\partial^2 f}{\partial x_n^2}$, $f : \R^N \to \R$
+\end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Graph Laplacian}
 $L = D - A$, $(Lx)_n = \sum_m a_{nm}(x_n - x_m)$
@@ -57,11 +69,17 @@ $\tilde{L} = I - D^{-1/2}AD^{-1/2}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Graph Fourier transform}
-$L = U\Lambda U^\top$, convolution: $x * y = U((U^\top x) \odot (U^\top y))$
+$L = U\Lambda U^\top$, $\Lambda := \diag(\lambda_1,\ldots,\lambda_M)$, $\lambda_i \geq \lambda_{i+1}$
+
+Convolution: $x * y = U((U^\top x) \odot (U^\top y))$
+
+Filtering: $G_\theta(L)x = U G_\theta(\Lambda)U^\top x$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Polynomial kernels}
-$U(\sum_{k=0}^K \alpha_k \Lambda^k)U^\top = \sum_{k=0}^K \alpha_k L^k$
+$U\left(\sum_{k=0}^K \alpha_k \Lambda^k\right)U^\top = \sum_{k=0}^K \alpha_k L^k$
+
+Polynomial kernel network layer: $x_i^{l+1} = \sum_j p_{ij}(L)x_j^l + b_i$, $p_{ij}(L) = \sum_{k=0}^K \alpha_{ijk} L^k$
 \end{subsubsectionbox}
 
 \subsectiontitle{Attention GNNs}
@@ -72,5 +90,9 @@ $q_{ij} = \softmax(f^l(u^\top(Vx_i; Vx_j; x_{ij})))$ s.t. $\sum_j A_{ij} q_{ij} 
 
 \begin{subsubsectionbox}{Attention propagation}
 $X^+ = \sigma(QXW)$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{Weisfeiler-Lehman test}
+Graph isomorphism test: iteratively aggregate node labels from neighborhoods.
 \end{subsubsectionbox}
 

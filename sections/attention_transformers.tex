@@ -5,11 +5,15 @@
 \subsectiontitle{Attention}
 
 \begin{subsubsectionbox}{Attention mixing}
-$y_s := \sum_t a_{st} Wx_t$, $a_{st} \geq 0$, $\sum_t a_{st} = 1$, $Y = WXA^\top$
+$\xi_s := \sum_t a_{st} Wx_t$, $a_{st} \geq 0$, $\sum_t a_{st} = 1$
+
+$A = (a_{st}) \in \R^{T \times T}$, $\Xi = WXA^\top$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Query-key matching}
-$Q = U_Q X$, $K = U_K X$, $Q^\top K = X^\top U_Q^\top U_K X$ (rank $\leq q$)
+$Q = U_Q X$, $K = U_K X$ $(U_Q, U_K \in \R^{q \times n})$
+
+$Q^\top K = X^\top U_Q^\top U_K X$ $(Q^\top K \in \R^{T \times T}$, rank $\leq q)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Softmax attention}
@@ -29,7 +33,9 @@ Self-attention: attend to its own values in the past. Cross-attention: decoder a
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Vision transformer patch embedding}
-$\text{patch}_t \mapsto x_t := V \vec(\text{patch}_t) \in \R^n$ with $V \in \R^{n \times (qp^2)}$
+$\R^{p \times p \times c} \ni \text{patch}_t \mapsto x_t := V \vec(\text{patch}_t) \in \R^n$
+
+$V \in \R^{n \times (cp^2)}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{GELU activation}

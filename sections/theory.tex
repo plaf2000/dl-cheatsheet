@@ -5,19 +5,33 @@
 \subsectiontitle{Infinite Width (NTK)}
 
 \begin{subsubsectionbox}{Neural tangent kernel}
-$K(\vx, \vx') := \langle \nabla_\theta F(\vx; \theta), \nabla_\theta F(\vx'; \theta) \rangle$
+$k(x, \xi) = \nabla f(x) \cdot \nabla f(\xi)$, $\R^d \times \R^d \to \R$
+
+Linearized: $h(\beta)(x) = f(x) + \beta \cdot \nabla f(x)$ with $\beta \approx \theta - \theta_0$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Gradient flow}
-$\dot{F}_t = -K_t (F_t - Y)$, $K_t := K(X, X; \theta_t)$
+ODE: $\dot{\theta} = \sum_{i=1}^s (y_i - f_i(\theta)) \nabla f_i(\theta)$
+
+Functional: $\dot{f}_j = \sum_{i=1}^s (y_i - f_i) k^{(\theta)}(x_i, x_j)$, $\dot{f} = K^{(\theta)}(y - f)$
 \end{subsubsectionbox}
 
-\begin{subsubsectionbox}{Linearized network}
-$\bar{F}(x) = F(x; \theta_0) + \nabla_\theta F(x; \theta_0)^\top (\theta - \theta_0)$
+\begin{subsubsectionbox}{Dual representation}
+$h(\alpha)(x) = f(x) + \sum_{i=1}^s \alpha_i \nabla f(x_i) \cdot \nabla f(x)$
+
+Optimal: $\alpha^* = K^+(y - f)$, $h^*(x) = k(x)K^+(y - f)$
 \end{subsubsectionbox}
 
-\begin{subsubsectionbox}{Lazy training}
-If width $n \to \infty$: $K_t \to K_0$ (deterministic), $F_t \to \bar{F}_t$ (linear dynamics).
+\begin{subsubsectionbox}{Infinite width limit}
+$w_{ij}^l = \frac{\sigma_w}{\sqrt{m}} \omega_{ij}^l$, $b_i^l = \frac{\sigma_b}{\sqrt{m}} \beta_i^l$, $\omega^l, \beta^l \stackrel{\text{iid}}{\sim} \N(0,1)$
+
+$k^{(\theta)} \to k^\infty$ for $m_l \to \infty$
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{NTK constancy}
+$\frac{dk^{(\theta(t))}}{dt} = 0$, $f^\infty(x) = k(x)K^+(y - f)$
+
+Near-constancy: $\|k(\theta_0) - k(\theta_t)\|_F^2 \in O(1/m)$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Kernel regression solution}
@@ -30,38 +44,54 @@ $\bar{F} \in \cH_K$ (RKHS), $\|\bar{F}\|_{\cH_K}^2 = \theta^\top \theta$
 
 \subsectiontitle{Bayesian DNNs}
 
-\begin{subsubsectionbox}{Prior}
-$p(\theta) = \N(0, \sigma_p^2 I)$
+\begin{subsubsectionbox}{Parameter prior}
+$p(\theta) = \prod_{i=1}^d p(\theta_i)$, $\theta_i \stackrel{\text{iid}}{\sim} \N(0, \sigma^2)$
+
+$-\log p(\theta) = \frac{1}{2\sigma^2}\|\theta\|^2 + \text{const}$ (weight decay)
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Likelihood}
-$p(y|x,\theta) = \N(F(x;\theta), \sigma^2)$
+$y_i = f^*(x_i) + \eta_i$, $\eta_i \stackrel{\text{iid}}{\sim} \N(0, \delta^2)$
+
+$-\log p(S|\theta) = \frac{1}{2\delta^2}\|y - f(\theta)\|^2 + \text{const}$
 \end{subsubsectionbox}
 
-\begin{subsubsectionbox}{Posterior (Laplace approx.)}
-$p(\theta|\cD) \approx \N(\theta^*, H^{-1})$, $H = \nabla^2 \cL(\theta^*)$
+\begin{subsubsectionbox}{Posterior}
+$p(\theta|S) = \frac{p(\theta)p(S|\theta)}{p(S)}$, $-\log p(\theta|S) = E(\theta) + \text{const}$
+
+$E(\theta) = \frac{1}{2\delta^2}\|y - f\|^2 + \frac{1}{2\sigma^2}\|\theta\|^2$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Predictive distribution}
-$p(y|x,\cD) = \int p(y|x,\theta)p(\theta|\cD)d\theta$
+$\bar{f}(x) = \int f(\theta)(x)p(\theta|S)d\theta$
+
+Bayesian ensembling: $\bar{f}^{(n)}(x) = \frac{\sum_{i=1}^n \exp[-E(\theta_i)]f(\theta_i)(x)}{\sum_{j=1}^n \exp[-E(\theta_j)]}$
 \end{subsubsectionbox}
 
 \subsectiontitle{GPs \& Infinite Width}
 
-\begin{subsubsectionbox}{NNGP kernel}
-$K_{\text{NNGP}}(\vx, \vx') = \E_{\theta}[F(\vx;\theta)F(\vx';\theta)]$ as width $\to \infty$
+\begin{subsubsectionbox}{Gaussian processes}
+$(f(x_1),\ldots,f(x_s)) \sim \N$, $\sum_{i=1}^s \alpha_i f(x_i) \sim \N$ $\forall \alpha \in \R^s$
+
+Mean $\mu(x) := \E_x[f(x)]$, covariance $k(x,\xi) := \E_{x,\xi}[f(x)f(\xi)] - \mu(x)\mu(\xi)$
 \end{subsubsectionbox}
 
-\begin{subsubsectionbox}{GP prior}
-$F \sim \cG\cP(0, K_{\text{NNGP}})$
+\begin{subsubsectionbox}{GPs in DNNs}
+Linear layer: $w \sim \N(0, \frac{\sigma^2}{n}I)$, $\E[y_iy_j] = \sigma^2 x_i^\top x_j$
+
+Deep layers: near-normal for high-dim inputs. $f \sim \mathcal{GP}(0, K^{l-1})$
 \end{subsubsectionbox}
 
-\begin{subsubsectionbox}{Recursive kernel}
-$K^{(l+1)} = \sigma_w^2 \E_{(u,v)\sim\N(0,\Sigma^{(l)})}[\phi(u)\phi(v)] + \sigma_b^2$
+\begin{subsubsectionbox}{Kernel recursion}
+$K_{\mu\nu}^l = \E[\varphi(x_{i\mu}^{l-1})\varphi(x_{i\nu}^{l-1})] = \sigma^2\E[\varphi(f_\mu)\varphi(f_\nu)]$
+
+Example kernels: $k(x,\xi) = x^\top \xi$, $k(x,\xi) = e^{-\gamma\|x-\xi\|^2}$
 \end{subsubsectionbox}
 
-\begin{subsubsectionbox}{GP posterior}
-$F|\cD \sim \cG\cP(\mu_*, K_*)$, $\mu_* = K_{*X}(K_{XX}+\sigma^2I)^{-1}Y$
+\begin{subsubsectionbox}{Kernel regression}
+$f^*(x) = k(x)^\top K^+ y$ (mean of Bayesian predictive)
+
+$\E[(f(x) - f^*(x))^2] = K(x,x) - k(x)^\top K^+ k(x)$
 \end{subsubsectionbox}
 
 \subsectiontitle{Statistical Learning Theory}
@@ -75,7 +105,9 @@ $\P[\cR(f) - \hat{\cR}(f) \leq \epsilon] \geq 1 - \delta$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{VC dimension}
-Largest $n$ s.t. $\exists$ data shattered by $\cF$. For linear: $d+1$.
+$\text{VC-dim}(F) := \max_s \sup_{|S|=s} \mathbf{1}[|F(S)| = 2^s]$
+
+VC inequality: $\P[\sup_F |\hat{E}(f) - E(f)| > \epsilon] \leq 8|F(s)|e^{-s\epsilon^2/32}$
 \end{subsubsectionbox}
 
 \begin{subsubsectionbox}{Rademacher complexity}
@@ -90,8 +122,16 @@ $\cR(f) \leq \hat{\cR}(f) + 2\cR_n(\cF) + \sqrt{\frac{\ln(1/\delta)}{2n}}$
 $\E[(f(x)-y)^2] = \text{Bias}^2 + \text{Var} + \sigma^2$
 \end{subsubsectionbox}
 
+\begin{subsubsectionbox}{Generalization gap}
+$\Delta := \max(0, E - \hat{E})$, $E$: expected population error, $\hat{E}$: empirical
+\end{subsubsectionbox}
+
 \begin{subsubsectionbox}{Double descent}
-Test error: U-shaped in classical regime, second descent in overparameterized regime.
+Beyond interpolation point, models may level out at lower generalization error.
+\end{subsubsectionbox}
+
+\begin{subsubsectionbox}{KL divergence}
+$D_{KL}(p\|q) = \int p(x)\log\frac{p(x)}{q(x)}dx = \E_{x\sim p}[\ln\frac{p(x)}{q(x)}]$
 \end{subsubsectionbox}
 
 \subsectiontitle{Loss Landscape}
